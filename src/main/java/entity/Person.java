@@ -8,10 +8,14 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -28,13 +32,15 @@ public class Person implements Serializable {
     private String firstName;
     private String lastName;
 
-    
+    @ManyToMany(mappedBy = "persons", cascade = CascadeType.ALL)
     private final List<Hobby> hobbies = new ArrayList();
-    
+
+    @OneToMany(mappedBy = "person")
     private final List<Phone> numbers = new ArrayList();
-    
+
+    @ManyToOne
     private Address address;
-    
+
     public Person() {
     }
 
@@ -42,6 +48,30 @@ public class Person implements Serializable {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+     public List<Phone> getNumbers() {
+        return numbers;
+    }
+
+    public void addNumbers(Phone phone) {
+        this.numbers.add(phone);
+    }
+    
+    public List<Hobby> getHobbies() {
+        return hobbies;
+    }
+
+    public void addHobbies(Hobby hobby) {
+        this.hobbies.add(hobby);
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public String getEmail() {
@@ -67,8 +97,6 @@ public class Person implements Serializable {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
-    
 
     public Long getId() {
         return id;

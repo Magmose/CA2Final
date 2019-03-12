@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -27,8 +29,10 @@ public class Address implements Serializable {
     private String street;
     private String additionalInfo;
 
+    @OneToMany(mappedBy = "address")
     private final List<Person> persons = new ArrayList();
     
+    @ManyToOne
     private CityInfo cityInfo;
     
     public Address() {
@@ -39,6 +43,22 @@ public class Address implements Serializable {
         this.additionalInfo = additionalInfo;
     }
 
+    public CityInfo getCityInfo() {
+        return cityInfo;
+    }
+
+    public void setCityInfo(CityInfo cityInfo) {
+        this.cityInfo = cityInfo;
+    }
+    
+     public List<Person> getPersons() {
+        return persons;
+    }
+
+    public void addPersons(Person person) {
+        this.persons.add(person);
+    }
+    
     public String getStreet() {
         return street;
     }
