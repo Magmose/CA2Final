@@ -8,7 +8,9 @@ package facade;
 
 import entity.Address;
 import entity.CityInfo;
+import entity.Hobby;
 import entity.Person;
+import entity.Phone;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,7 +26,8 @@ public class DBFacade {
     public Person getPersonByPhoneNumber(String phonenumber) {
         EntityManager em = emf.createEntityManager();
         try {
-            return (Person) em.createQuery("SELECT p FROM Person AS p WHERE :number MEMBER OF p.numbers").setParameter("number", phonenumber).getSingleResult();
+            Phone phone = em.find(Phone.class, phonenumber);
+            return (Person) em.createQuery("SELECT p FROM Person AS p WHERE :number MEMBER OF p.numbers").setParameter("number", phone).getSingleResult();
         } finally {
             em.close();
         }
@@ -33,7 +36,8 @@ public class DBFacade {
     public List<Person> getAllPersonsByHobby (String hobbyname) {
         EntityManager em = emf.createEntityManager();
         try {
-            return (List<Person>) em.createQuery("SELECT p FROM Person AS p WHERE :hobby MEMBER OF p.hobbies").setParameter("hobby", hobbyname).getResultList();
+            Hobby hobby = em.find(Hobby.class, hobbyname);
+            return (List<Person>) em.createQuery("SELECT p FROM Person AS p WHERE :hobby MEMBER OF p.hobbies").setParameter("hobby", hobby).getResultList();
         } finally {
             em.close();
         }
@@ -42,7 +46,8 @@ public class DBFacade {
     public List<Person> getAllPersonsByCity (String cityname) {
         EntityManager em = emf.createEntityManager();
         try {
-            List<Address> adressesInCity = em.createQuery("SELECT a FROM Address AS a WHERE a.cityInfo = :city").setParameter("city", cityname).getResultList();
+            CityInfo ci = em.find(CityInfo.class, cityname);
+            List<Address> adressesInCity = em.createQuery("SELECT a FROM Address AS a WHERE a.cityInfo = :city").setParameter("city", ci).getResultList();
             return (List<Person>) em.createQuery("SELECT p FROM Person AS p WHERE p.address IN :cityadresses").setParameter("cityadresses", adressesInCity).getResultList();
         } finally {
             em.close();
@@ -52,6 +57,7 @@ public class DBFacade {
     public int getPersonCountWithGivenHobby (String hobbyname) {
         EntityManager em = emf.createEntityManager();
         try {
+            Hobby hobby = em.find(Hobby.class, hobbyname);
             return (int) em.createQuery("SELECT count(p.id) FROM Person AS p WHERE :hobby MEMBER OF p.hobbies").setParameter("hobby", hobbyname).getSingleResult();
         } finally {
             em.close();

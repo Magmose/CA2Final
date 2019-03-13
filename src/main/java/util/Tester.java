@@ -1,9 +1,12 @@
 package util;
 
-import javax.persistence.Persistence;
+import entity.Person;
+import facade.DBFacade;
 
 public class Tester {
     public static void main(String[] args) {
-        Persistence.generateSchema("pu", null);
+        DBFacade dbf = new DBFacade();
+        Person p = dbf.getPersonByPhoneNumber("48766818");
+        System.out.println(p);
     }
 }
