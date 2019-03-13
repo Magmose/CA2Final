@@ -10,11 +10,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-public class DataGenrator {
+public class DataGenerator {
 
     EntityManagerFactory emf;
 
-    public DataGenrator(EntityManagerFactory emf) {
+    public DataGenerator(EntityManagerFactory emf) {
         this.emf = emf;
     }
 
@@ -29,38 +29,7 @@ public class DataGenrator {
             lastName = lName[(int) (Math.random() * (lName.length - 1))];
 
             Person person = new Person(firstName.toLowerCase() + "@" + lastName.toLowerCase() + ".dk", firstName, lastName);
-
-            //Add Address
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu");
-            EntityManager em = emf.createEntityManager();
-            Address address = getGeneratedAddress();
-            Phone phone = getGeneratedPhone();
-            
-            try {
-                em.getTransaction().begin();
-                em.persist(address);
-                em.getTransaction().commit();
-            } finally {
-                em.close();
-            }
-            person.setAddress(address);
-
-            try {
-                em.getTransaction().begin();
-                em.persist(phone);
-                phone.setPerson(person);
-                em.getTransaction().commit();
-            } finally {
-                em.close();
-            }
-            
-            
-
-            //Add Hobbies
-            person.addHobbies(getGeneratedHobby());
-            person.addHobbies(getGeneratedHobby());
             persons.add(person);
-            //System.out.println(person);
         }
         return persons;
     }
@@ -71,7 +40,6 @@ public class DataGenrator {
         String streetName = streetNames[(int) (Math.random() * (streetNames.length - 1))];
 
         Address address = new Address(streetName, number.toString());
-        //System.out.println(address.toString());
         return address;
     }
 
@@ -86,7 +54,6 @@ public class DataGenrator {
         String desc = descs[(int) (Math.random() * (descs.length - 1))];
 
         Phone phone = new Phone(number, desc);
-        //System.out.println(number);
         return phone;
     }
 
@@ -97,27 +64,6 @@ public class DataGenrator {
         String desc = descs[(int) (Math.random() * (descs.length - 1))];
 
         Hobby hobby = new Hobby(name, desc);
-        //System.out.println(hobby.toString());
         return hobby;
-    }
-
-    public static void main(String[] args) {
-        //Persistence.generateSchema("pu", null);
-
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu");
-        EntityManager em = emf.createEntityManager();
-
-        DataGenrator dg = new DataGenrator(emf);
-        try {
-            em.getTransaction().begin();
-
-            List<Person> persons = dg.getGeneratedPersons(50);
-            for (int i = 0; i < persons.size(); i++) {
-                em.persist(persons.get(i));
-            }
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
     }
 }

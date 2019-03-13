@@ -18,7 +18,7 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class Phone implements Serializable {
-
+    // Slet id og lav number til primary key?
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
