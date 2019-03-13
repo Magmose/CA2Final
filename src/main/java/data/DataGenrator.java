@@ -29,24 +29,32 @@ public class DataGenrator {
             lastName = lName[(int) (Math.random() * (lName.length - 1))];
 
             Person person = new Person(firstName.toLowerCase() + "@" + lastName.toLowerCase() + ".dk", firstName, lastName);
-            
+
             //Add Address
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu");
             EntityManager em = emf.createEntityManager();
             Address address = getGeneratedAddress();
+            Phone phone = getGeneratedPhone();
+            
             try {
                 em.getTransaction().begin();
-
                 em.persist(address);
                 em.getTransaction().commit();
             } finally {
                 em.close();
-            }  
+            }
             person.setAddress(address);
+
+            try {
+                em.getTransaction().begin();
+                em.persist(phone);
+                phone.setPerson(person);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
             
-            //Add Phone
-            //Phone phone = getGeneratedPhone();
-            //person.addNumbers(phone);
+            
 
             //Add Hobbies
             person.addHobbies(getGeneratedHobby());
