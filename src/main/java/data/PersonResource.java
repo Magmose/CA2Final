@@ -60,7 +60,7 @@ public class PersonResource {
     public void putJson(String content) {
     }
     @GET
-    @Path("phone/{id}")
+    @Path("phone/{phone}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getPersonByPhone(@PathParam("phone") String phone) {
         Person p = db.getPersonByPhoneNumber(phone);
