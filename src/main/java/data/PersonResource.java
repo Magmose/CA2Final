@@ -7,6 +7,7 @@ package data;
 
 import com.google.gson.Gson;
 import entity.Person;
+import entity.PhoneDTO;
 import facade.DBFacade;
 import java.util.List;
 import javax.ws.rs.core.Context;
@@ -64,7 +65,8 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String getPersonByPhone(@PathParam("phone") String phone) {
         Person p = db.getPersonByPhoneNumber(phone);
-        return gson.toJson(p);
+        PhoneDTO person = new PhoneDTO(p.getFirstName(), phone);
+        return gson.toJson(person);
     }
     @GET
     @Path("hobby/{hobbyName}")

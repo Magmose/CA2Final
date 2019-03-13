@@ -22,11 +22,20 @@ import javax.persistence.Persistence;
  */
 public class DBFacade {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu");
+    public static void main(String[] args) {
+        DBFacade dbf = new DBFacade();
+     //Test getPersonByPhoneNumber
+        /*String tlf = "01412238";
+        Person p = dbf.getPersonByPhoneNumber(tlf);
+        System.out.println("Personname: " + p.getFirstName());*/
     
+        String hobbyname = "Programming";
+    }
     public Person getPersonByPhoneNumber(String phonenumber) {
         EntityManager em = emf.createEntityManager();
         try {
             Phone phone = em.find(Phone.class, phonenumber);
+            System.out.println("found phonenumber: " + phone.getNumber());
             return (Person) em.createQuery("SELECT p FROM Person AS p WHERE :number MEMBER OF p.numbers").setParameter("number", phone).getSingleResult();
         } finally {
             em.close();
