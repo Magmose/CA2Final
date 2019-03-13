@@ -58,7 +58,7 @@ public class DBFacade {
         EntityManager em = emf.createEntityManager();
         try {
             Hobby hobby = em.find(Hobby.class, hobbyname);
-            return (int) em.createQuery("SELECT count(p.id) FROM Person AS p WHERE :hobby MEMBER OF p.hobbies").setParameter("hobby", hobbyname).getSingleResult();
+            return (int) em.createQuery("SELECT count(p.id) FROM Person AS p WHERE :hobby MEMBER OF p.hobbies").setParameter("hobby", hobby).getSingleResult();
         } finally {
             em.close();
         }
