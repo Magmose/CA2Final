@@ -17,6 +17,22 @@ public class CreateData {
         this.emf = emf;
     }
 
+    
+    public Address createAddress() {
+        EntityManager em = emf.createEntityManager();
+        DataGenerator dg = new DataGenerator(emf);
+        Address address = dg.getGeneratedAddress();
+        
+        try {
+            em.getTransaction().begin();
+            em.persist(address);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return address;
+    }
+
     public void createData(int amount) {
         DataGenerator dg = new DataGenerator(emf);
         EntityManager em = emf.createEntityManager();
@@ -31,7 +47,7 @@ public class CreateData {
 
                 //Address 
                 Address address = dg.getGeneratedAddress();
-
+                
                 //Phone 
                 Phone phone1 = dg.getGeneratedPhone();
                 Phone phone2 = dg.getGeneratedPhone();
@@ -55,7 +71,7 @@ public class CreateData {
 
                 em.persist(person);
 
-                em.persist(address);
+                //em.persist(address);
 
                 em.persist(phone1);
                 em.persist(phone2);
