@@ -6,9 +6,11 @@
 package data;
 
 import com.google.gson.Gson;
+import entity.HobbyPersonsDTO;
 import entity.Person;
 import entity.PhoneDTO;
 import facade.DBFacade;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -73,7 +75,13 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String getPersonsFromHobby(@PathParam("hobbyName") String name) {
         List<Person> list = db.getAllPersonsByHobby(name);
-        return gson.toJson(list);
+        List<String> firstnames = new ArrayList();
+        for (Person p : list) {
+            firstnames.add(p.getFirstName());
+        }
+        HobbyPersonsDTO dto = new HobbyPersonsDTO(name);
+        dto.setPersonFirstname(firstnames);
+        return gson.toJson(dto);
     }
     @GET
     @Path("hobby/count/{hobbyName}")

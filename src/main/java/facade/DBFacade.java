@@ -28,8 +28,11 @@ public class DBFacade {
         /*String tlf = "01412238";
         Person p = dbf.getPersonByPhoneNumber(tlf);
         System.out.println("Personname: " + p.getFirstName());*/
-    
-        String hobbyname = "Programming";
+        String hobbyname = "name";
+        List<Person> p = dbf.getAllPersonsByHobby(hobbyname);
+        for (Person person : p) {
+            System.out.println("Person firstname: " + person.getFirstName());
+        }
     }
     public Person getPersonByPhoneNumber(String phonenumber) {
         EntityManager em = emf.createEntityManager();
