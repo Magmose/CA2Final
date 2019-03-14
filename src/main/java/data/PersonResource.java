@@ -12,6 +12,7 @@ import entity.HobbyPersonsDTO;
 import entity.Address;
 import entity.CityInfo;
 import entity.Person;
+import entity.PersonsInCityDTO;
 import entity.PhoneDTO;
 import facade.DBFacade;
 import java.util.ArrayList;
@@ -92,23 +93,28 @@ public class PersonResource {
         HobbyPersonsDTO dto = new HobbyPersonsDTO(name);
         dto.setPersonFirstname(firstnames);
         return gson.toJson(dto);
-
     }
 
     @GET
     @Path("hobby/count/{hobbyName}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getPersonCountFromHobby(@PathParam("hobbyName") String name) {
-        int count = db.getPersonCountWithGivenHobby(name);
+        long count = db.getPersonCountWithGivenHobby(name);
         return gson.toJson(count);
     }
 
     @GET
-    @Path("city/{cityName}")
+    @Path("city/{zipcode}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getPersonsFromCity(@PathParam("cityName") String name) {
-        List<Person> list = db.getAllPersonsByCity(name);
-        return gson.toJson(list);
+    public String getPersonsFromCity(@PathParam("zipcode") String zip) {
+        List<Person> list = db.getAllPersonsByCity(zip);
+        List<String> firstnames = new ArrayList();
+        for (Person p : list) {
+            firstnames.add(p.getFirstName());
+        }
+        PersonsInCityDTO dto = new PersonsInCityDTO(zip);
+        dto.setPersonFirstname(firstnames);
+        return gson.toJson(dto);
     }
 
     @GET

@@ -55,10 +55,10 @@ public class DBFacade {
         }
     }
     
-    public List<Person> getAllPersonsByCity (String cityname) {
+    public List<Person> getAllPersonsByCity (String zip) {
         EntityManager em = emf.createEntityManager();
         try {
-            CityInfo ci = em.find(CityInfo.class, cityname);
+            CityInfo ci = em.find(CityInfo.class, zip);
             List<Address> adressesInCity = em.createQuery("SELECT a FROM Address AS a WHERE a.cityInfo = :city").setParameter("city", ci).getResultList();
             return (List<Person>) em.createQuery("SELECT p FROM Person AS p WHERE p.address IN :cityadresses").setParameter("cityadresses", adressesInCity).getResultList();
         } finally {
@@ -66,11 +66,11 @@ public class DBFacade {
         }
     }
     
-    public int getPersonCountWithGivenHobby (String hobbyname) {
+    public long getPersonCountWithGivenHobby (String hobbyname) {
         EntityManager em = emf.createEntityManager();
         try {
             Hobby hobby = em.find(Hobby.class, hobbyname);
-            return (int) em.createQuery("SELECT count(p.id) FROM Person AS p WHERE :hobby MEMBER OF p.hobbies").setParameter("hobby", hobby).getSingleResult();
+            return (long) em.createQuery("SELECT count(p.id) FROM Person AS p WHERE :hobby MEMBER OF p.hobbies").setParameter("hobby", hobby).getSingleResult();
         } finally {
             em.close();
         }
@@ -80,7 +80,7 @@ public class DBFacade {
         EntityManager em = emf.createEntityManager();
         try {
             //zipCodes in Denmark are 4-digit codes
-            return (List<CityInfo>) em.createQuery("SELECT c FROM CityInfo AS c WHERE LENGTH(c.zipCode) = 4").getResultList();
+            return (List<CityInfo>) em.createQuery("SELECT c FROM CityInfo AS c WHERE LENGTH(c.ZIP) = 4").getResultList();
         } finally {
             em.close();
         }
