@@ -7,6 +7,7 @@ import entity.Phone;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 public class CDFix {
 
@@ -36,6 +37,11 @@ public class CDFix {
             em.getTransaction().begin();
             em.persist(phone);
             em.getTransaction().commit();
+        }catch(Exception e){
+            e.printStackTrace();
+            Query q = em.createQuery("SELECT ph FROM Phone ph WHERE ph.number = :number");
+            q.setParameter("number", phone.getNumber());
+            phone = (Phone)q.getSingleResult();
         } finally {
             em.close();
         }
@@ -71,13 +77,15 @@ public class CDFix {
 
     public void setPhoneToPerson(Person person, Phone phone) {
         EntityManager em = emf.createEntityManager();
+            phone.setPerson(person);
+            person.addNumbers(phone);
 
         try {
             em.getTransaction().begin();
+            System.out.println("merging.................");
+//            em.merge(phone);
             em.merge(person);
-            em.merge(phone);
-            phone.setPerson(person);
-            person.addNumbers(phone);
+            
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -92,13 +100,18 @@ public class CDFix {
         facade.createAddress(address);
 
         Person person = new Person("email", "firstName", "lastName");
-        person = facade.createPerson(person);
+        System.out.println("person before:"+person);
+//        facade.createPerson(person);
+        System.out.println("person after:"+person);
 
         Hobby hobby = new Hobby("name", "description");
         facade.createHobby(hobby);
 
         Phone phone = new Phone("number", "description");
-        phone = facade.createPhone(phone);
+        Phone phone2 = new Phone("number", "description");
+
+//        phone = facade.createPhone(phone);
+//        phone2 = facade.createPhone(phone2);
 
         facade.setPhoneToPerson(person, phone);
 //        phone.setPerson(person);

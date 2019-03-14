@@ -107,7 +107,7 @@ public class Address implements Serializable {
 
     @Override
     public String toString() {
-        return "entity1.Address[ id=" + id + " ]";
+        return this.id + ": "+this.getStreet()+" "+this.getCityInfo();
     }
 
 }

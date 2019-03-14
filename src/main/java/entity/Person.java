@@ -35,7 +35,7 @@ public class Person implements Serializable {
     @ManyToMany(mappedBy = "persons", cascade = CascadeType.ALL)
     private final List<Hobby> hobbies = new ArrayList();
 
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", cascade = CascadeType.MERGE)
     private final List<Phone> numbers = new ArrayList();
 
     @ManyToOne
@@ -50,14 +50,14 @@ public class Person implements Serializable {
         this.lastName = lastName;
     }
 
-     public List<Phone> getNumbers() {
+    public List<Phone> getNumbers() {
         return numbers;
     }
 
     public void addNumbers(Phone phone) {
         this.numbers.add(phone);
     }
-    
+
     public List<Hobby> getHobbies() {
         return hobbies;
     }
@@ -71,6 +71,8 @@ public class Person implements Serializable {
     }
 
     public void setAddress(Address address) {
+        if(!address.getPersons().contains(this))
+            address.addPersons(this);
         this.address = address;
     }
 
@@ -128,7 +130,13 @@ public class Person implements Serializable {
 
     @Override
     public String toString() {
-        return "entity1.Person[ id=" + id + " ]";
+        String res;
+        if (this.id == null) {
+            res = 0 + ": " + this.firstName + " " + this.lastName + " " + this.address;
+        } else {
+            res = this.id + ": " + this.firstName + " " + this.lastName + " " + this.address;
+        }
+        return res;
     }
 
 }
