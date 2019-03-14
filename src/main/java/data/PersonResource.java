@@ -6,6 +6,7 @@
 package data;
 
 import com.google.gson.Gson;
+import entity.Address;
 import entity.CityInfo;
 import entity.Person;
 import entity.PhoneDTO;
@@ -116,13 +117,46 @@ public class PersonResource {
         db.addPersonToDB(p);
         return Response.ok().entity(gson.toJson(p)).build();
     }
+    @POST
+    @Path("address/}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response postAddress(String content) {
+        Address a = gson.fromJson(content, Address.class);
+        db.addAddressToDB(a);
+        return Response.ok().entity(gson.toJson(a)).build();
+    }
+
+    @PUT
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response putPerson(String content, @PathParam("id") int id) {
+        Person p = gson.fromJson(   content, Person.class);
+//        db.updatePersonInDB(p, id);
+        return Response.ok().entity(gson.toJson(p)).build();
+    }
+    @PUT
+    @Path("address/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response putAddress(String content, @PathParam("id") int id) {
+        Address a = gson.fromJson(content, Address.class);
+//        db.updateAddressInDB(a,id);
+        return Response.ok().entity(gson.toJson(a)).build();
+    }
 
     @DELETE
     @Path("/{id}")
-    public void deleteById(@PathParam("id") int id) {
+    public void deletePersonById(@PathParam("id") int id) {
         //below method call needs fixing once the method parameter is changed in DBFacade.deletePersonInDB
-        //db.deletePersonInDB(person);
+        //db.deletePersonInDB(id);
     }
-    
+    @DELETE
+    @Path("address/{id}")
+    public void deleteAddressById(@PathParam("id") int id) {
+        //below method call needs fixing once the method parameter is changed in DBFacade.deletePersonInDB
+//        db.deleteAddressInDB(id);
+    }
 
 }
