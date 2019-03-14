@@ -6,6 +6,7 @@
 package data;
 
 import com.google.gson.Gson;
+import entity.CityInfo;
 import entity.Person;
 import entity.PhoneDTO;
 import facade.DBFacade;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -29,6 +31,7 @@ import javax.ws.rs.core.Response;
  */
 @Path("person")
 public class PersonResource {
+
     DBFacade db = new DBFacade();
     Gson gson = new Gson();
 
@@ -43,6 +46,7 @@ public class PersonResource {
 
     /**
      * Retrieves representation of an instance of data.PersonResource
+     *
      * @return an instance of java.lang.String
      */
     @GET
@@ -54,12 +58,14 @@ public class PersonResource {
 
     /**
      * PUT method for updating or creating an instance of PersonResource
+     *
      * @param content representation for the resource
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void putJson(String content) {
     }
+
     @GET
     @Path("phone/{phone}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -68,13 +74,16 @@ public class PersonResource {
         PhoneDTO person = new PhoneDTO(p.getFirstName(), phone);
         return gson.toJson(person);
     }
+
     @GET
     @Path("hobby/{hobbyName}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getPersonsFromHobby(@PathParam("hobbyName") String name) {
         List<Person> list = db.getAllPersonsByHobby(name);
+
         return gson.toJson(list);
     }
+
     @GET
     @Path("hobby/count/{hobbyName}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -82,6 +91,7 @@ public class PersonResource {
         int count = db.getPersonCountWithGivenHobby(name);
         return gson.toJson(count);
     }
+
     @GET
     @Path("city/{cityName}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -89,11 +99,30 @@ public class PersonResource {
         List<Person> list = db.getAllPersonsByCity(name);
         return gson.toJson(list);
     }
+
+    @GET
+    @Path("zip/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getZipcodesInDK() {
+        List<CityInfo> list = db.getZipCodesInDenmark();
+        return gson.toJson(list);
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postPerson(String content) {
         Person p = gson.fromJson(content, Person.class);
+        db.addPersonToDB(p);
         return Response.ok().entity(gson.toJson(p)).build();
     }
+
+    @DELETE
+    @Path("/{id}")
+    public void deleteById(@PathParam("id") int id) {
+        //below method call needs fixing once the method parameter is changed in DBFacade.deletePersonInDB
+        //db.deletePersonInDB(person);
+    }
+    
+
 }
