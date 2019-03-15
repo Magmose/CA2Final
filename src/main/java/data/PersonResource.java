@@ -15,6 +15,7 @@ import entity.CityInfo;
 import entity.Person;
 import entity.PersonsInCityDTO;
 import entity.PhoneDTO;
+import entity.ZipDTO;
 import facade.DBFacade;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +112,26 @@ public class PersonResource {
                 .entity(gson.toJson(dtoList)).build();
 
     }
+    
+    @GET
+    @Path("zip/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getZipcodesInDK() {
+        List<CityInfo> list = db.getZipCodesInDenmark();
+        List<ZipDTO> dtozips = new ArrayList();
+        for (CityInfo city : list) {
+            String zip = city.getZipCode();
+            String cityname = city.getCity();
+            ZipDTO zipdto = new ZipDTO(zip, cityname);
+            dtozips.add(zipdto);
+        }
+        return Response.ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .entity(gson.toJson(dtozips)).build();
+    }
 
     @GET
     @Path("hobby/count/{hobbyName}")
@@ -132,14 +153,6 @@ public class PersonResource {
         PersonsInCityDTO dto = new PersonsInCityDTO(zip);
         dto.setPersonFirstname(firstnames);
         return gson.toJson(dto);
-    }
-
-    @GET
-    @Path("zip/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getZipcodesInDK() {
-        List<CityInfo> list = db.getZipCodesInDenmark();
-        return gson.toJson(list);
     }
 
     @POST
