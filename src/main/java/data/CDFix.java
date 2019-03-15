@@ -4,6 +4,7 @@ import entity.Address;
 import entity.CityInfo;
 import entity.Hobby;
 import entity.Person;
+import entity.PersonInfoDTO;
 import entity.Phone;
 import java.util.List;
 import java.util.Random;
@@ -227,6 +228,10 @@ public class CDFix {
         phone2 = facade.createPhone(phone2);
         facade.setPhoneToPerson(person, phone);
         facade.setPhoneToPerson(person, phone2);
+    }
+
+    void createDtoPerson(PersonInfoDTO p) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
