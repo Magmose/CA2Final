@@ -1,9 +1,12 @@
 package util;
 
 import facade.DBFacade;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 public class Tester {
     public static void main(String[] args) {
-        DBFacade dbf = new DBFacade();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
+        DBFacade dbf = new DBFacade(emf);
     }
 }

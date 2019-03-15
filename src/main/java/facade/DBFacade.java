@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package facade;
 
 import entity.Address;
@@ -21,10 +20,17 @@ import javax.persistence.Persistence;
  * @author Simon Bojesen
  */
 public class DBFacade {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu");
+
+    EntityManagerFactory emf;
+
+    public DBFacade(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
+
     public static void main(String[] args) {
-        DBFacade dbf = new DBFacade();
-     //Test getPersonByPhoneNumber
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
+        DBFacade dbf = new DBFacade(emf);
+        //Test getPersonByPhoneNumber
         /*String tlf = "01412238";
         Person p = dbf.getPersonByPhoneNumber(tlf);
         System.out.println("Personname: " + p.getFirstName());*/
@@ -34,18 +40,19 @@ public class DBFacade {
             System.out.println("Person firstname: " + person.getFirstName());
         }
     }
+
     public Person getPersonByPhoneNumber(String phonenumber) {
         EntityManager em = emf.createEntityManager();
         try {
             Phone phone = em.find(Phone.class, phonenumber);
-            System.out.println("found phonenumber: " + phone.getNumber());
+           // System.out.println("found phonenumber: " + phone.getNumber());
             return (Person) em.createQuery("SELECT p FROM Person AS p WHERE :number MEMBER OF p.numbers").setParameter("number", phone).getSingleResult();
         } finally {
             em.close();
         }
     }
-    
-    public List<Person> getAllPersonsByHobby (String hobbyname) {
+
+    public List<Person> getAllPersonsByHobby(String hobbyname) {
         EntityManager em = emf.createEntityManager();
         try {
             Hobby hobby = em.find(Hobby.class, hobbyname);
@@ -54,8 +61,8 @@ public class DBFacade {
             em.close();
         }
     }
-    
-    public List<Person> getAllPersonsByCity (String cityname) {
+
+    public List<Person> getAllPersonsByCity(String cityname) {
         EntityManager em = emf.createEntityManager();
         try {
             CityInfo ci = em.find(CityInfo.class, cityname);
@@ -65,8 +72,8 @@ public class DBFacade {
             em.close();
         }
     }
-    
-    public int getPersonCountWithGivenHobby (String hobbyname) {
+
+    public int getPersonCountWithGivenHobby(String hobbyname) {
         EntityManager em = emf.createEntityManager();
         try {
             Hobby hobby = em.find(Hobby.class, hobbyname);
@@ -75,7 +82,7 @@ public class DBFacade {
             em.close();
         }
     }
-    
+
     public List<CityInfo> getZipCodesInDenmark() {
         EntityManager em = emf.createEntityManager();
         try {
@@ -85,7 +92,7 @@ public class DBFacade {
             em.close();
         }
     }
-    
+
     public void addPersonToDB(Person person) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -96,7 +103,17 @@ public class DBFacade {
             em.close();
         }
     }
-    
+
+    public Person getPersonById(Person person) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            return em.find(Person.class, person.getId());
+        } finally {
+            em.close();
+        }
+    }
+
     public void updatePersonInDB(Person person) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -107,7 +124,7 @@ public class DBFacade {
             em.close();
         }
     }
-    
+
     public void deletePersonInDB(Person person) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -118,7 +135,7 @@ public class DBFacade {
             em.close();
         }
     }
-    
+
     public void addAddressToDB(Address address) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -129,7 +146,7 @@ public class DBFacade {
             em.close();
         }
     }
-    
+
     public void updateAddressInDB(Address address) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -140,7 +157,7 @@ public class DBFacade {
             em.close();
         }
     }
-    
+
     public void deleteAddressInDB(Address address) {
         EntityManager em = emf.createEntityManager();
         try {
