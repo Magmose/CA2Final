@@ -15,6 +15,7 @@ import entity.CityInfo;
 import entity.Person;
 import entity.PersonsInCityDTO;
 import entity.PhoneDTO;
+import entity.ZipDTO;
 import facade.DBFacade;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,12 +96,65 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonsFromHobby(@PathParam("hobbyName") String name) {
         List<Person> list = db.getAllPersonsByHobby(name);
-        List<String> firstnames = new ArrayList();
-        for (Person p : list) {
-            firstnames.add(p.getFirstName());
+        List<HobbyPersonsDTO> dtoList = new ArrayList();
+        for (int i = 0; i < list.size(); i++) {
+            String fName = list.get(i).getFirstName();
+            String lName = list.get(i).getLastName();
+            String email = list.get(i).getEmail();
+            HobbyPersonsDTO hPerson = new HobbyPersonsDTO(fName, lName, email);
+            dtoList.add(hPerson);
         }
-        HobbyPersonsDTO dto = new HobbyPersonsDTO(name);
-        dto.setPersonFirstname(firstnames);
+        return Response.ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .entity(gson.toJson(dtoList)).build();
+
+    }
+    
+    @GET
+    @Path("zip/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getZipcodesInDK() {
+        List<CityInfo> list = db.getZipCodesInDenmark();
+        List<ZipDTO> dtozips = new ArrayList();
+        for (CityInfo city : list) {
+            String zip = city.getZipCode();
+            String cityname = city.getCity();
+            ZipDTO zipdto = new ZipDTO(zip, cityname);
+            dtozips.add(zipdto);
+        }
+        return Response.ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .entity(gson.toJson(dtozips)).build();
+    }
+
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getPersonById(@PathParam("id") int id) {
+        Person p = db.getPersonById(id);
+        return gson.toJson(p);
+    }
+
+
+    @GET
+    @Path("city/{zipcode}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonsFromCity(@PathParam("zipcode") String zip) {
+        List<Person> list = db.getAllPersonsByCity(zip);
+        List<PersonsInCityDTO> dto = new ArrayList();
+        for (Person p : list) {
+            String fName = p.getFirstName();
+            String lName = p.getLastName();
+            String email = p.getEmail();
+            PersonsInCityDTO personincityDTO = new PersonsInCityDTO(fName, lName, email);
+            dto.add(personincityDTO);
+        }
         return Response.ok()
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Credentials", "true")
@@ -116,35 +170,8 @@ public class PersonResource {
         long count = db.getPersonCountWithGivenHobby(name);
         return gson.toJson(count);
     }
-    @GET
-    @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getPersonById(@PathParam("id") int id) {
-        Person p = db.getPersonById(id);
-        return gson.toJson(p);
-    }
 
-    @GET
-    @Path("city/{zipcode}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getPersonsFromCity(@PathParam("zipcode") String zip) {
-        List<Person> list = db.getAllPersonsByCity(zip);
-        List<String> firstnames = new ArrayList();
-        for (Person p : list) {
-            firstnames.add(p.getFirstName());
-        }
-        PersonsInCityDTO dto = new PersonsInCityDTO(zip);
-        dto.setPersonFirstname(firstnames);
-        return gson.toJson(dto);
-    }
-
-    @GET
-    @Path("zip/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getZipcodesInDK() {
-        List<CityInfo> list = db.getZipCodesInDenmark();
-        return gson.toJson(list);
-    }
+    
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

@@ -13,28 +13,41 @@ import java.util.List;
  * @author Simon Bojesen
  */
 public class PersonsInCityDTO {
-    private String zip;
-    private List<String> personFirstname;
+    private String personFirstname;
+    private String personLastname;
+    private String personEmail;
 
-    public PersonsInCityDTO(String zip) {
-        this.zip = zip;
+    public PersonsInCityDTO(String personFirstname, String personLastname, String personEmail) {
+        this.personFirstname = personFirstname;
+        this.personLastname = personLastname;
+        this.personEmail = personEmail;
     }
 
-    public String getZip() {
-        return zip;
-    }
-
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
-
-    public List<String> getPersonFirstname() {
+    public String getPersonFirstname() {
         return personFirstname;
     }
 
-    public void setPersonFirstname(List<String> personFirstname) {
+    public void setPersonFirstname(String personFirstname) {
         this.personFirstname = personFirstname;
     }
+
+    public String getPersonLastname() {
+        return personLastname;
+    }
+
+    public void setPersonLastname(String personLastname) {
+        this.personLastname = personLastname;
+    }
+
+    public String getPersonEmail() {
+        return personEmail;
+    }
+
+    public void setPersonEmail(String personEmail) {
+        this.personEmail = personEmail;
+    }
+
+    
     
     
 }
