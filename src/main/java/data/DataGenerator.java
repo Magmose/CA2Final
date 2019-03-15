@@ -12,12 +12,6 @@ import javax.persistence.Persistence;
 
 public class DataGenerator {
 
-    EntityManagerFactory emf;
-
-    public DataGenerator(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-
     public List<Person> getGeneratedPersons(Integer howMany) {
         List<Person> persons = new ArrayList();
 
@@ -35,7 +29,7 @@ public class DataGenerator {
     }
 
     public Address getGeneratedAddress() {
-        Integer number = (int) (Math.random() * 300);
+        Integer number = (int) (Math.random() * 20);
         String[] streetNames = {"Glentevej", "Kollegiebakken", "Cphvej", "Lærkevej", "Birkevej", "Vibevej", "Vinkelvej", "Østergade", "Engvej"};
         String streetName = streetNames[(int) (Math.random() * (streetNames.length - 1))];
 
