@@ -132,6 +132,27 @@ public class PersonResource {
                 .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(dtozips)).build();
     }
+    
+    @GET
+    @Path("city/{zipcode}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonsFromCity(@PathParam("zipcode") String zip) {
+        List<Person> list = db.getAllPersonsByCity(zip);
+        List<PersonsInCityDTO> dto = new ArrayList();
+        for (Person p : list) {
+            String fName = p.getFirstName();
+            String lName = p.getLastName();
+            String email = p.getEmail();
+            PersonsInCityDTO personincityDTO = new PersonsInCityDTO(fName, lName, email);
+            dto.add(personincityDTO);
+        }
+        return Response.ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .entity(gson.toJson(dto)).build();
+    }
 
     @GET
     @Path("hobby/count/{hobbyName}")
@@ -141,19 +162,7 @@ public class PersonResource {
         return gson.toJson(count);
     }
 
-    @GET
-    @Path("city/{zipcode}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getPersonsFromCity(@PathParam("zipcode") String zip) {
-        List<Person> list = db.getAllPersonsByCity(zip);
-        List<String> firstnames = new ArrayList();
-        for (Person p : list) {
-            firstnames.add(p.getFirstName());
-        }
-        PersonsInCityDTO dto = new PersonsInCityDTO(zip);
-        dto.setPersonFirstname(firstnames);
-        return gson.toJson(dto);
-    }
+    
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
