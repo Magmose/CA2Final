@@ -75,6 +75,7 @@ public class FacadeTest {
 
             testPerson = person;
             testPerson2 = person1;
+
             
             em.persist(city);
             em.persist(address);
@@ -83,7 +84,6 @@ public class FacadeTest {
             em.persist(hobby);
             em.persist(person1);
             em.persist(phone1);
-            
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -91,11 +91,6 @@ public class FacadeTest {
     }
 
     // Test the single method in the Facade
-    @Test
-    public void getPerson() {
-        Person personDB = facade.getPersonById(testPerson);
-        Assert.assertEquals(testPerson.getEmail(), personDB.getEmail());
-    }
 
     @Test
     public void getPersonByPhoneNumber() {

@@ -26,6 +26,7 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(data.PersonResource.class);
+        resources.add(filter.CorsFilter.class);
     }
     
 }

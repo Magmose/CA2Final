@@ -6,13 +6,13 @@
 package data;
 
 import com.google.gson.Gson;
-import com.sun.corba.se.impl.util.Version;
 
 import entity.HobbyPersonsDTO;
 
 import entity.Address;
 import entity.CityInfo;
 import entity.Person;
+import entity.PersonInfoDTO;
 import entity.PersonsInCityDTO;
 import entity.PhoneDTO;
 import entity.ZipDTO;
@@ -45,7 +45,7 @@ public class PersonResource {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
     DBFacade db = new DBFacade(emf);
     Gson gson = new Gson();
-
+    CDFix cd = new CDFix(emf);
     @Context
     private UriInfo context;
 
@@ -86,8 +86,8 @@ public class PersonResource {
         return Response.ok()
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(person)).build();
     }
 
@@ -107,12 +107,12 @@ public class PersonResource {
         return Response.ok()
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(dtoList)).build();
 
     }
-    
+
     @GET
     @Path("zip/")
     @Produces(MediaType.APPLICATION_JSON)
@@ -128,11 +128,20 @@ public class PersonResource {
         return Response.ok()
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(dtozips)).build();
     }
-    
+
+
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getPersonById(@PathParam("id") int id) {
+        Person p = db.getPersonById(id);
+        return gson.toJson(p);
+    }
+
     @GET
     @Path("city/{zipcode}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -149,8 +158,8 @@ public class PersonResource {
         return Response.ok()
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(dto)).build();
     }
 
@@ -171,8 +180,8 @@ public class PersonResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postPerson(String content) {
-        Person p = gson.fromJson(content, Person.class);
-        db.addPersonToDB(p);
+        PersonInfoDTO p = gson.fromJson(content, PersonInfoDTO.class);
+        cd.createDtoPerson(p);
         return Response.ok().entity(gson.toJson(p)).build();
     }
 
@@ -202,7 +211,7 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response putAddress(String content, @PathParam("id") int id) {
         Address a = gson.fromJson(content, Address.class);
-      db.updateAddressInDB(a,id);
+        db.updateAddressInDB(a, id);
         return Response.ok().entity(gson.toJson(a)).build();
     }
 
