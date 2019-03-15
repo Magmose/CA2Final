@@ -106,6 +106,17 @@ public class DBFacade {
             em.close();
         }
     }
+    
+    public void addAddressToDB(Address address) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(address);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
 
     public Person getPersonById(Person person) {
         EntityManager em = emf.createEntityManager();
