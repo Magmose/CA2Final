@@ -5,6 +5,7 @@
  */
 package facade;
 
+import com.google.gson.Gson;
 import entity.Address;
 import entity.CityInfo;
 import entity.Hobby;
@@ -22,6 +23,7 @@ import javax.persistence.Persistence;
 public class DBFacade {
 
     EntityManagerFactory emf;
+    Gson gson = new Gson();
 
     public DBFacade(EntityManagerFactory emf) {
         this.emf = emf;
@@ -118,11 +120,13 @@ public class DBFacade {
         }
     }
 
-    public Person getPersonById(Person person) {
+    public Person getPersonById(int id) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            return em.find(Person.class, person.getId());
+            Person p = em.find(Person.class, id);
+            System.out.println(gson.toJson(p));
+            return p;
         } finally {
             em.close();
         }

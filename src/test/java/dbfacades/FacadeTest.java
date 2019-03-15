@@ -87,29 +87,29 @@ public class FacadeTest {
         }
     }
 
-    // Test the single method in the Facade
-    @Test
-    public void getPerson() {
-        Person personDB = facade.getPersonById(testPerson);
-        Assert.assertEquals(testPerson.getEmail(), personDB.getEmail());
-    }
-
-    @Test
-    public void getPersonByPhoneNumber() {
-        Person person = facade.getPersonByPhoneNumber("number");
-        Assert.assertEquals(person, testPerson);
-    }
-
-    @Test
-    public void getPersonsByHobby() {
-        List<Person> persons = facade.getAllPersonsByHobby("name");
-        Assert.assertEquals(2, persons.size());
-    }
-
-    //@Test  Long cannot be cast to java.lang.Integer
-    public void getPersonCountWithGivenHobby() {
-        long count = facade.getPersonCountWithGivenHobby("name");
-        Assert.assertEquals(2, count);
-    }
+//    // Test the single method in the Facade
+//    @Test
+//    public void getPerson() {
+//        Person personDB = facade.getPersonById(testPerson);
+//        Assert.assertEquals(testPerson.getEmail(), personDB.getEmail());
+//    }
+//
+//    @Test
+//    public void getPersonByPhoneNumber() {
+//        Person person = facade.getPersonByPhoneNumber("number");
+//        Assert.assertEquals(person, testPerson);
+//    }
+//
+//    @Test
+//    public void getPersonsByHobby() {
+//        List<Person> persons = facade.getAllPersonsByHobby("name");
+//        Assert.assertEquals(2, persons.size());
+//    }
+//
+//    //@Test  Long cannot be cast to java.lang.Integer
+//    public void getPersonCountWithGivenHobby() {
+//        long count = facade.getPersonCountWithGivenHobby("name");
+//        Assert.assertEquals(2, count);
+//    }
    
 }

@@ -116,6 +116,13 @@ public class PersonResource {
         long count = db.getPersonCountWithGivenHobby(name);
         return gson.toJson(count);
     }
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getPersonById(@PathParam("id") int id) {
+        Person p = db.getPersonById(id);
+        return gson.toJson(p);
+    }
 
     @GET
     @Path("city/{zipcode}")
