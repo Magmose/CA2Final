@@ -13,6 +13,7 @@ import entity.HobbyPersonsDTO;
 import entity.Address;
 import entity.CityInfo;
 import entity.Person;
+import entity.PersonsInCityDTO;
 import entity.PhoneDTO;
 import facade.DBFacade;
 import java.util.ArrayList;
@@ -115,16 +116,22 @@ public class PersonResource {
     @Path("hobby/count/{hobbyName}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getPersonCountFromHobby(@PathParam("hobbyName") String name) {
-        int count = db.getPersonCountWithGivenHobby(name);
+        long count = db.getPersonCountWithGivenHobby(name);
         return gson.toJson(count);
     }
 
     @GET
-    @Path("city/{cityName}")
+    @Path("city/{zipcode}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getPersonsFromCity(@PathParam("cityName") String name) {
-        List<Person> list = db.getAllPersonsByCity(name);
-        return gson.toJson(list);
+    public String getPersonsFromCity(@PathParam("zipcode") String zip) {
+        List<Person> list = db.getAllPersonsByCity(zip);
+        List<String> firstnames = new ArrayList();
+        for (Person p : list) {
+            firstnames.add(p.getFirstName());
+        }
+        PersonsInCityDTO dto = new PersonsInCityDTO(zip);
+        dto.setPersonFirstname(firstnames);
+        return gson.toJson(dto);
     }
 
     @GET
@@ -160,7 +167,7 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response putPerson(String content, @PathParam("id") int id) {
         Person p = gson.fromJson(content, Person.class);
-//        db.updatePersonInDB(p, id);
+        db.updatePersonInDB(p, id);
         return Response.ok().entity(gson.toJson(p)).build();
     }
 
@@ -170,7 +177,7 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response putAddress(String content, @PathParam("id") int id) {
         Address a = gson.fromJson(content, Address.class);
-//        db.updateAddressInDB(a,id);
+      db.updateAddressInDB(a,id);
         return Response.ok().entity(gson.toJson(a)).build();
     }
 
@@ -178,14 +185,14 @@ public class PersonResource {
     @Path("/{id}")
     public void deletePersonById(@PathParam("id") int id) {
         //below method call needs fixing once the method parameter is changed in DBFacade.deletePersonInDB
-        //db.deletePersonInDB(id);
+        db.deletePersonInDB(id);
     }
 
     @DELETE
     @Path("address/{id}")
     public void deleteAddressById(@PathParam("id") int id) {
         //below method call needs fixing once the method parameter is changed in DBFacade.deletePersonInDB
-//        db.deleteAddressInDB(id);
+        db.deleteAddressInDB(id);
     }
 
 }

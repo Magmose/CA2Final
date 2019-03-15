@@ -23,7 +23,7 @@ public class Hobby implements Serializable {
     private String name;
     private String description;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     private final List<Person> persons = new ArrayList();
 
     public Hobby() {
