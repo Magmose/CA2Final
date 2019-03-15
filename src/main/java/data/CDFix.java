@@ -124,7 +124,7 @@ public class CDFix {
         try {
             em.getTransaction().begin();
             em.merge(person);
-
+            
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -187,8 +187,8 @@ public class CDFix {
             address = facade.createAddress(address);
             facade.setAdressToPerson(person, address);
 
-            facade.createHobby(hobby);
-            facade.createHobby(hobby2);
+            hobby = facade.createHobby(hobby);
+            hobby2 = facade.createHobby(hobby2);
             facade.setHobbyToPerson(person, hobby);
             facade.setHobbyToPerson(person, hobby2);
 
