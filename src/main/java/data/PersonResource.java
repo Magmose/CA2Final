@@ -148,8 +148,8 @@ public class PersonResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response putPerson(String content, @PathParam("id") int id) {
-        Person p = gson.fromJson(   content, Person.class);
-//        db.updatePersonInDB(p, id);
+        Person p = gson.fromJson(content, Person.class);
+        db.updatePersonInDB(p, id);
         return Response.ok().entity(gson.toJson(p)).build();
     }
     @PUT
@@ -158,7 +158,7 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response putAddress(String content, @PathParam("id") int id) {
         Address a = gson.fromJson(content, Address.class);
-//        db.updateAddressInDB(a,id);
+      db.updateAddressInDB(a,id);
         return Response.ok().entity(gson.toJson(a)).build();
     }
 
@@ -166,13 +166,13 @@ public class PersonResource {
     @Path("/{id}")
     public void deletePersonById(@PathParam("id") int id) {
         //below method call needs fixing once the method parameter is changed in DBFacade.deletePersonInDB
-        //db.deletePersonInDB(id);
+        db.deletePersonInDB(id);
     }
     @DELETE
     @Path("address/{id}")
     public void deleteAddressById(@PathParam("id") int id) {
         //below method call needs fixing once the method parameter is changed in DBFacade.deletePersonInDB
-//        db.deleteAddressInDB(id);
+        db.deleteAddressInDB(id);
     }
 
 }

@@ -56,6 +56,7 @@ public class DBFacade {
     }
     
     public List<Person> getAllPersonsByCity (String zip) {
+        //Adresser skal kobles til byen før denne funktion kan testes
         EntityManager em = emf.createEntityManager();
         try {
             CityInfo ci = em.find(CityInfo.class, zip);
@@ -97,28 +98,6 @@ public class DBFacade {
         }
     }
     
-    public void updatePersonInDB(Person person) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            em.getTransaction().begin();
-            em.merge(person);
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
-    }
-    
-    public void deletePersonInDB(Person person) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            em.getTransaction().begin();
-            em.remove(person);
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
-    }
-    
     public void addAddressToDB(Address address) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -130,22 +109,55 @@ public class DBFacade {
         }
     }
     
-    public void updateAddressInDB(Address address) {
+    public void updatePersonInDB(Person newPersonData, int id) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.merge(address);
+            Person oldPersonData = em.find(Person.class, id);
+            oldPersonData.setFirstName(newPersonData.getFirstName());
+            oldPersonData.setLastName(newPersonData.getLastName());
+            oldPersonData.setEmail(newPersonData.getEmail());
+            oldPersonData.setAddress(newPersonData.getAddress());
+            em.merge(oldPersonData);
             em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
     
-    public void deleteAddressInDB(Address address) {
+    public void updateAddressInDB(Address newAddressData, int id) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.remove(address);
+            Address oldAddressData = em.find(Address.class, id);
+            oldAddressData.setStreet(newAddressData.getStreet());
+            oldAddressData.setCityInfo(newAddressData.getCityInfo());
+            oldAddressData.setAdditionalInfo(newAddressData.getAdditionalInfo());
+            em.merge(oldAddressData);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public void deletePersonInDB(int id) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Person p = em.find(Person.class, id);
+            em.remove(p);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public void deleteAddressInDB(int id) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Address a = em.find(Address.class, id);
+            em.remove(a);
             em.getTransaction().commit();
         } finally {
             em.close();
