@@ -6,37 +6,35 @@
 
 package entity;
 
-import java.util.List;
-
 /**
  *
  * @author Simon Bojesen
  */
 public class PersonsInCityDTO {
-    private String personFirstname;
-    private String personLastname;
+    private String personFirstName;
+    private String personLastName;
     private String personEmail;
 
     public PersonsInCityDTO(String personFirstname, String personLastname, String personEmail) {
-        this.personFirstname = personFirstname;
-        this.personLastname = personLastname;
+        this.personFirstName = personFirstname;
+        this.personLastName = personLastname;
         this.personEmail = personEmail;
     }
 
     public String getPersonFirstname() {
-        return personFirstname;
+        return personFirstName;
     }
 
     public void setPersonFirstname(String personFirstname) {
-        this.personFirstname = personFirstname;
+        this.personFirstName = personFirstname;
     }
 
     public String getPersonLastname() {
-        return personLastname;
+        return personLastName;
     }
 
     public void setPersonLastname(String personLastname) {
-        this.personLastname = personLastname;
+        this.personLastName = personLastname;
     }
 
     public String getPersonEmail() {

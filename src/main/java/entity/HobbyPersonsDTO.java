@@ -1,7 +1,5 @@
 package entity;
 
-import java.util.List;
-
 public class HobbyPersonsDTO {
     private String hobbyName;
     private String personFirstName;

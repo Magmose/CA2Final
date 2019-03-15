@@ -133,6 +133,7 @@ public class PersonResource {
                 .entity(gson.toJson(dtozips)).build();
     }
 
+
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
