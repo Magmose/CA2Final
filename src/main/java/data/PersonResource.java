@@ -94,18 +94,20 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonsFromHobby(@PathParam("hobbyName") String name) {
         List<Person> list = db.getAllPersonsByHobby(name);
-        List<String> firstnames = new ArrayList();
-        for (Person p : list) {
-            firstnames.add(p.getFirstName());
+        List<HobbyPersonsDTO> dtoList = new ArrayList();
+        for (int i = 0; i < list.size(); i++) {
+            String fName = list.get(i).getFirstName();
+            String lName = list.get(i).getLastName();
+            String email = list.get(i).getEmail();
+            HobbyPersonsDTO hPerson = new HobbyPersonsDTO(fName, lName, email);
+            dtoList.add(hPerson);
         }
-        HobbyPersonsDTO dto = new HobbyPersonsDTO(name);
-        dto.setPersonFirstname(firstnames);
         return Response.ok()
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Credentials", "true")
                 .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
                 .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
-                .entity(gson.toJson(dto)).build();
+                .entity(gson.toJson(dtoList)).build();
 
     }
 

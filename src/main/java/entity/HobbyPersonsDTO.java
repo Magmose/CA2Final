@@ -4,12 +4,20 @@ import java.util.List;
 
 public class HobbyPersonsDTO {
     private String hobbyName;
-    private List<String> personFirstname;
+    private String personFirstName;
+    private String personLastName;
+    private String personEmail;
 
     public HobbyPersonsDTO(String hobbyName) {
         this.hobbyName = hobbyName;
     }
 
+    public HobbyPersonsDTO(String personFirstName, String personLastName, String personEmail) {
+        this.personFirstName = personFirstName;
+        this.personLastName = personLastName;
+        this.personEmail = personEmail;
+    }
+    
     public String getHobbyName() {
         return hobbyName;
     }
@@ -18,12 +26,29 @@ public class HobbyPersonsDTO {
         this.hobbyName = hobbyName;
     }
 
-    public List<String> getPersonFirstname() {
-        return personFirstname;
+    public String getPersonFirstName() {
+        return personFirstName;
     }
 
-    public void setPersonFirstname(List<String> personFirstname) {
-        this.personFirstname = personFirstname;
+    public void setPersonFirstName(String personFirstName) {
+        this.personFirstName = personFirstName;
     }
+
+    public String getPersonLastName() {
+        return personLastName;
+    }
+
+    public void setPersonLastName(String personLastName) {
+        this.personLastName = personLastName;
+    }
+
+    public String getPersonEmail() {
+        return personEmail;
+    }
+
+    public void setPersonEmail(String personEmail) {
+        this.personEmail = personEmail;
+    }
+
     
 }
