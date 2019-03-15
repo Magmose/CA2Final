@@ -6,6 +6,7 @@
 package data;
 
 import com.google.gson.Gson;
+import com.sun.corba.se.impl.util.Version;
 
 import entity.HobbyPersonsDTO;
 
@@ -17,6 +18,8 @@ import entity.PhoneDTO;
 import facade.DBFacade;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -38,7 +41,8 @@ import javax.ws.rs.core.Response;
 @Path("person")
 public class PersonResource {
 
-    DBFacade db = new DBFacade();
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
+    DBFacade db = new DBFacade(emf);
     Gson gson = new Gson();
 
     @Context
@@ -75,16 +79,21 @@ public class PersonResource {
     @GET
     @Path("phone/{phone}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getPersonByPhone(@PathParam("phone") String phone) {
+    public Response getPersonByPhone(@PathParam("phone") String phone) {
         Person p = db.getPersonByPhoneNumber(phone);
         PhoneDTO person = new PhoneDTO(p.getFirstName(), phone);
-        return gson.toJson(person);
+        return Response.ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .entity(gson.toJson(person)).build();
     }
 
     @GET
     @Path("hobby/{hobbyName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getPersonsFromHobby(@PathParam("hobbyName") String name) {
+    public Response getPersonsFromHobby(@PathParam("hobbyName") String name) {
         List<Person> list = db.getAllPersonsByHobby(name);
         List<String> firstnames = new ArrayList();
         for (Person p : list) {
@@ -92,7 +101,12 @@ public class PersonResource {
         }
         HobbyPersonsDTO dto = new HobbyPersonsDTO(name);
         dto.setPersonFirstname(firstnames);
-        return gson.toJson(dto);
+        return Response.ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .entity(gson.toJson(dto)).build();
     }
 
     @GET
@@ -133,6 +147,7 @@ public class PersonResource {
         db.addPersonToDB(p);
         return Response.ok().entity(gson.toJson(p)).build();
     }
+
     @POST
     @Path("address/}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -152,6 +167,7 @@ public class PersonResource {
         db.updatePersonInDB(p, id);
         return Response.ok().entity(gson.toJson(p)).build();
     }
+
     @PUT
     @Path("address/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -168,6 +184,7 @@ public class PersonResource {
         //below method call needs fixing once the method parameter is changed in DBFacade.deletePersonInDB
         db.deletePersonInDB(id);
     }
+
     @DELETE
     @Path("address/{id}")
     public void deleteAddressById(@PathParam("id") int id) {

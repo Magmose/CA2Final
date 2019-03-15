@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 import java.io.Serializable;
@@ -35,10 +30,10 @@ public class Person implements Serializable {
     @ManyToMany(mappedBy = "persons", cascade = CascadeType.ALL)
     private final List<Hobby> hobbies = new ArrayList();
 
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", cascade = CascadeType.MERGE)
     private final List<Phone> numbers = new ArrayList();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Address address;
 
     public Person() {
@@ -50,14 +45,14 @@ public class Person implements Serializable {
         this.lastName = lastName;
     }
 
-     public List<Phone> getNumbers() {
+    public List<Phone> getNumbers() {
         return numbers;
     }
 
     public void addNumbers(Phone phone) {
         this.numbers.add(phone);
     }
-    
+
     public List<Hobby> getHobbies() {
         return hobbies;
     }
@@ -71,6 +66,8 @@ public class Person implements Serializable {
     }
 
     public void setAddress(Address address) {
+        if(!address.getPersons().contains(this))
+            address.addPersons(this);
         this.address = address;
     }
 
@@ -104,31 +101,6 @@ public class Person implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Person)) {
-            return false;
-        }
-        Person other = (Person) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entity1.Person[ id=" + id + " ]";
     }
 
 }
