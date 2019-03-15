@@ -20,7 +20,7 @@ public class CreateData {
     
     public Address createAddress() {
         EntityManager em = emf.createEntityManager();
-        DataGenerator dg = new DataGenerator(emf);
+        DataGenerator dg = new DataGenerator();
         Address address = dg.getGeneratedAddress();
         
         try {
@@ -34,7 +34,7 @@ public class CreateData {
     }
 
     public void createData(int amount) {
-        DataGenerator dg = new DataGenerator(emf);
+        DataGenerator dg = new DataGenerator();
         EntityManager em = emf.createEntityManager();
 
         //Person person = new Person("hej@hej.dk", "hej", "hej");
