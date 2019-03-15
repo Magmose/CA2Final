@@ -64,8 +64,6 @@ public class DBFacade {
 
     
     public List<Person> getAllPersonsByCity (String zip) {
-        //Adresser skal kobles til byen før denne funktion kan testes
-
         EntityManager em = emf.createEntityManager();
         try {
             CityInfo ci = em.find(CityInfo.class, zip);
