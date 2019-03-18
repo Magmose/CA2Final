@@ -73,6 +73,8 @@ public class DBFacade {
             CityInfo ci = em.find(CityInfo.class, zip);
             List<Address> adressesInCity = em.createQuery("SELECT a FROM Address AS a WHERE a.cityInfo = :city").setParameter("city", ci).getResultList();
             return (List<Person>) em.createQuery("SELECT p FROM Person AS p WHERE p.address IN :cityadresses").setParameter("cityadresses", adressesInCity).getResultList();
+        } catch (Exception e) {
+            return null;
         } finally {
             em.close();
         }
