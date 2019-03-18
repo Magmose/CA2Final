@@ -84,10 +84,10 @@ public class PersonResource {
         Person p = db.getPersonByPhoneNumber(phone);
         PhoneDTO person = new PhoneDTO(p.getFirstName(), phone);
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+//                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Credentials", "true")
+//                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+//                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(person)).build();
     }
 
@@ -105,10 +105,10 @@ public class PersonResource {
             dtoList.add(hPerson);
         }
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+//                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Credentials", "true")
+//                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+//                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(dtoList)).build();
 
     }
@@ -126,10 +126,6 @@ public class PersonResource {
             dtozips.add(zipdto);
         }
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(dtozips)).build();
     }
 
@@ -156,10 +152,6 @@ public class PersonResource {
             dto.add(personincityDTO);
         }
         return Response.ok()
-//                .header("Access-Control-Allow-Origin", "*")
-//                .header("Access-Control-Allow-Credentials", "true")
-//                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-//                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(dto)).build();
     }
 
@@ -169,10 +161,6 @@ public class PersonResource {
     public Response getPersonCountFromHobby(@PathParam("hobbyName") String name) {
         long count = db.getPersonCountWithGivenHobby(name);
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(count)).build();
     }
     
