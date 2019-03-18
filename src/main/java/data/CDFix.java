@@ -33,6 +33,7 @@ public class CDFix {
             q.setParameter("street", address.getStreet());
             q.setParameter("additionalInfo", address.getAdditionalInfo());
             address = (Address) q.getSingleResult();
+            System.out.println(address.getAdditionalInfo() + " " + address.getStreet() + "-------------");
 //            e.printStackTrace();
         } finally {
             em.close();
@@ -175,10 +176,10 @@ public class CDFix {
         CityInfo cityInfo = new CityInfo(personDTO.getZIP(), personDTO.getCITY());
         Hobby hobby = new Hobby(personDTO.getName(), personDTO.getDescriptionHobby());
         Phone phone = new Phone(personDTO.getNumber(), personDTO.getDescriptionPhone());
-        createPerson(person);
-        createAddress(address);
-        createPhone(phone);
-        createHobby(hobby);
+        person = createPerson(person);
+        address = createAddress(address);
+        phone = createPhone(phone);
+        hobby = createHobby(hobby);
 
         setAdressToPerson(person, address);
         setHobbyToPerson(person, hobby);

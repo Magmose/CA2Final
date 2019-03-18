@@ -171,7 +171,7 @@ public class DBFacade {
             for (int i = 0; i < p.getNumbers().size(); i++) {
                 em.remove(p.getNumbers().get(i));
             }
-            em.remove(p.getNumbers());
+//            em.remove(p.getNumbers());
             em.remove(p);
             em.getTransaction().commit();
         } finally {
