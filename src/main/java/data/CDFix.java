@@ -4,6 +4,7 @@ import entity.Address;
 import entity.CityInfo;
 import entity.Hobby;
 import entity.Person;
+import entity.PersonInfoDTO;
 import entity.Phone;
 import java.util.List;
 import java.util.Random;
@@ -124,7 +125,7 @@ public class CDFix {
         try {
             em.getTransaction().begin();
             em.merge(person);
-            
+
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -133,8 +134,8 @@ public class CDFix {
 
     public void setZipToAddress(Address address, CityInfo cityInfo) {
         EntityManager em = emf.createEntityManager();
-          cityInfo.addAdress(address);
-          address.setCityInfo(cityInfo);
+        cityInfo.addAdress(address);
+        address.setCityInfo(cityInfo);
         try {
             em.getTransaction().begin();
             em.merge(cityInfo);
@@ -165,16 +166,32 @@ public class CDFix {
         DataGenerator dg = new DataGenerator();
         List<Person> persons = dg.getGeneratedPersons(100);
 
+        autoGen(persons, dg, facade);   
+    }
 
-        autoGen(persons, dg, facade);
+    public void createDtoPerson(PersonInfoDTO personDTO) {
+        Person person = new Person(personDTO.getEmail(), personDTO.getFirstName(), personDTO.getLastName());
+        Address address = new Address(personDTO.getStreet(), personDTO.getAdditionalInfo());
+        CityInfo cityInfo = new CityInfo(personDTO.getZIP(), personDTO.getCITY());
+        Hobby hobby = new Hobby(personDTO.getName(), personDTO.getDescriptionHobby());
+        Phone phone = new Phone(personDTO.getNumber(), personDTO.getDescriptionPhone());
+        createPerson(person);
+        createAddress(address);
+        createPhone(phone);
+        createHobby(hobby);
+
+        setAdressToPerson(person, address);
+        setHobbyToPerson(person, hobby);
+        setPhoneToPerson(person, phone);
+        setZipToAddress(address, cityInfo);
     }
 
     private static void autoGen(List<Person> persons, DataGenerator dg, CDFix facade) {
         List<CityInfo> ci = facade.getAllCityInfoBetween();
         Random r = new Random();
-        
+
         for (int i = 0; i < persons.size(); i++) {
-        int randomNumber = r.nextInt(ci.size());
+            int randomNumber = r.nextInt(ci.size());
             Person person = persons.get(i);
             Address address = dg.getGeneratedAddress();
             Phone phone = dg.getGeneratedPhone();
@@ -201,32 +218,4 @@ public class CDFix {
         }
 
     }
-
-    private static void testMethod(CDFix facade) {
-        Person person = new Person("email", "firstName", "lastName");
-        System.out.println("person before:" + person);
-        facade.createPerson(person);
-        System.out.println("person after:" + person);
-
-        Address address = new Address("Street", "StreetInfo");
-        Address address2 = new Address("Street", "StreetInfo");
-        address = facade.createAddress(address);
-        address2 = facade.createAddress(address2);
-        facade.setAdressToPerson(person, address);
-
-        Hobby hobby = new Hobby("name", "description");
-        Hobby hobby2 = new Hobby("name", "description");
-        facade.createHobby(hobby);
-        facade.createHobby(hobby2);
-        facade.setHobbyToPerson(person, hobby);
-        facade.setHobbyToPerson(person, hobby2);
-
-        Phone phone = new Phone("number", "description");
-        Phone phone2 = new Phone("number", "description");
-        phone = facade.createPhone(phone);
-        phone2 = facade.createPhone(phone2);
-        facade.setPhoneToPerson(person, phone);
-        facade.setPhoneToPerson(person, phone2);
-    }
-
 }

@@ -47,7 +47,7 @@ public class DBFacade {
         EntityManager em = emf.createEntityManager();
         try {
             Phone phone = em.find(Phone.class, phonenumber);
-           // System.out.println("found phonenumber: " + phone.getNumber());
+            // System.out.println("found phonenumber: " + phone.getNumber());
             return (Person) em.createQuery("SELECT p FROM Person AS p WHERE :number MEMBER OF p.numbers").setParameter("number", phone).getSingleResult();
         } finally {
             em.close();
@@ -64,10 +64,9 @@ public class DBFacade {
         }
     }
 
+
     
     public List<Person> getAllPersonsByCity (String zip) {
-        //Adresser skal kobles til byen før denne funktion kan testes
-
         EntityManager em = emf.createEntityManager();
         try {
             CityInfo ci = em.find(CityInfo.class, zip);
@@ -79,7 +78,7 @@ public class DBFacade {
             em.close();
         }
     }
-  
+
     public long getPersonCountWithGivenHobby(String hobbyname) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -110,7 +109,7 @@ public class DBFacade {
             em.close();
         }
     }
-    
+
     public void addAddressToDB(Address address) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -133,7 +132,7 @@ public class DBFacade {
             em.close();
         }
     }
-    
+
     public void updatePersonInDB(Person newPersonData, int id) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -149,7 +148,7 @@ public class DBFacade {
             em.close();
         }
     }
-    
+
     public void updateAddressInDB(Address newAddressData, int id) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -164,19 +163,24 @@ public class DBFacade {
             em.close();
         }
     }
-    
-    public void deletePersonInDB(int id) {
+
+    public void deletePersonInDB(long id) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             Person p = em.find(Person.class, id);
+            System.out.println(p.getNumbers());
+            for (int i = 0; i < p.getNumbers().size(); i++) {
+                em.remove(p.getNumbers().get(i));
+            }
+            em.remove(p.getNumbers());
             em.remove(p);
             em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
-    
+
     public void deleteAddressInDB(int id) {
         EntityManager em = emf.createEntityManager();
         try {
