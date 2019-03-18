@@ -169,10 +169,10 @@ public class DBFacade {
         try {
             em.getTransaction().begin();
             Person p = em.find(Person.class, id);
-            System.out.println(p.getNumbers());
-            for (int i = 0; i < p.getNumbers().size(); i++) {
-                em.remove(p.getNumbers().get(i));
-            }
+//            System.out.println(p.getNumbers());
+//            for (int i = 0; i < p.getNumbers().size(); i++) {
+//                em.remove(p.getNumbers().get(i));
+//            }
 //            em.remove(p.getNumbers());
             em.remove(p);
             em.getTransaction().commit();

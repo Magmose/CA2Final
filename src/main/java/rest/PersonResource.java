@@ -3,19 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package data;
+package rest;
 
 import com.google.gson.Gson;
+import data.CreateData;
 
-import entity.HobbyPersonsDTO;
+import dto.HobbyPersonsDTO;
 
 import entity.Address;
 import entity.CityInfo;
 import entity.Person;
-import entity.PersonInfoDTO;
-import entity.PersonsInCityDTO;
-import entity.PhoneDTO;
-import entity.ZipDTO;
+import dto.PersonInfoDTO;
+import dto.PersonsInCityDTO;
+import dto.PhoneDTO;
+import dto.ZipDTO;
 import facade.DBFacade;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class PersonResource {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
     DBFacade db = new DBFacade(emf);
     Gson gson = new Gson();
-    CDFix cd = new CDFix(emf);
+    CreateData cd = new CreateData(emf);
     @Context
     private UriInfo context;
 
