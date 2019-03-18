@@ -3,19 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package data;
+package rest;
 
 import com.google.gson.Gson;
+import data.CreateData;
 
-import entity.HobbyPersonsDTO;
+import dto.HobbyPersonsDTO;
 
 import entity.Address;
 import entity.CityInfo;
 import entity.Person;
-import entity.PersonInfoDTO;
-import entity.PersonsInCityDTO;
-import entity.PhoneDTO;
-import entity.ZipDTO;
+import dto.PersonInfoDTO;
+import dto.PersonsInCityDTO;
+import dto.PhoneDTO;
+import dto.ZipDTO;
 import facade.DBFacade;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class PersonResource {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
     DBFacade db = new DBFacade(emf);
     Gson gson = new Gson();
-    CDFix cd = new CDFix(emf);
+    CreateData cd = new CreateData(emf);
     @Context
     private UriInfo context;
 
@@ -84,10 +85,10 @@ public class PersonResource {
         Person p = db.getPersonByPhoneNumber(phone);
         PhoneDTO person = new PhoneDTO(p.getFirstName(), phone);
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+//                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Credentials", "true")
+//                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+//                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(person)).build();
     }
 
@@ -105,10 +106,10 @@ public class PersonResource {
             dtoList.add(hPerson);
         }
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+//                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Credentials", "true")
+//                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+//                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(dtoList)).build();
 
     }
@@ -126,10 +127,6 @@ public class PersonResource {
             dtozips.add(zipdto);
         }
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(dtozips)).build();
     }
 
@@ -156,10 +153,6 @@ public class PersonResource {
             dto.add(personincityDTO);
         }
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(dto)).build();
     }
 
@@ -169,10 +162,6 @@ public class PersonResource {
     public Response getPersonCountFromHobby(@PathParam("hobbyName") String name) {
         long count = db.getPersonCountWithGivenHobby(name);
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .entity(gson.toJson(count)).build();
     }
     

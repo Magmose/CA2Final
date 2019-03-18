@@ -31,7 +31,7 @@ public class Person implements Serializable {
     @ManyToMany(mappedBy = "persons", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private final List<Hobby> hobbies = new ArrayList();
 
-    @OneToMany(mappedBy = "person", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "person", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private final List<Phone> numbers = new ArrayList();
 
     @ManyToOne(cascade = CascadeType.MERGE)

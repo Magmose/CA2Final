@@ -1,5 +1,5 @@
 
-package data;
+package rest;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
@@ -25,8 +25,10 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(data.PersonResource.class);
+        resources.add(exceptions.GenericExceptionMapper.class);
         resources.add(filter.CorsFilter.class);
+        //resources.add(filter.CorsFilter.class);
+        resources.add(rest.PersonResource.class);
     }
     
 }
