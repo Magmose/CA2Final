@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 /**
  *
@@ -67,8 +68,9 @@ public class Person implements Serializable {
     }
 
     public void setAddress(Address address) {
-        if(!address.getPersons().contains(this))
+        if (!address.getPersons().contains(this)) {
             address.addPersons(this);
+        }
         this.address = address;
     }
 
