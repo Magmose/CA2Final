@@ -125,7 +125,7 @@ public class CDFix {
         try {
             em.getTransaction().begin();
             em.merge(person);
-            
+
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -134,8 +134,8 @@ public class CDFix {
 
     public void setZipToAddress(Address address, CityInfo cityInfo) {
         EntityManager em = emf.createEntityManager();
-          cityInfo.addAdress(address);
-          address.setCityInfo(cityInfo);
+        cityInfo.addAdress(address);
+        address.setCityInfo(cityInfo);
         try {
             em.getTransaction().begin();
             em.merge(cityInfo);
@@ -166,11 +166,10 @@ public class CDFix {
         DataGenerator dg = new DataGenerator();
         List<Person> persons = dg.getGeneratedPersons(100);
 
-
-        autoGen(persons, dg, facade);
+        autoGen(persons, dg, facade);   
     }
 
-    public void createDtoPerson(PersonInfoDTO personDTO){
+    public void createDtoPerson(PersonInfoDTO personDTO) {
         Person person = new Person(personDTO.getEmail(), personDTO.getFirstName(), personDTO.getLastName());
         Address address = new Address(personDTO.getStreet(), personDTO.getAdditionalInfo());
         CityInfo cityInfo = new CityInfo(personDTO.getZIP(), personDTO.getCITY());
@@ -180,18 +179,19 @@ public class CDFix {
         createAddress(address);
         createPhone(phone);
         createHobby(hobby);
-        
+
         setAdressToPerson(person, address);
         setHobbyToPerson(person, hobby);
         setPhoneToPerson(person, phone);
         setZipToAddress(address, cityInfo);
     }
+
     private static void autoGen(List<Person> persons, DataGenerator dg, CDFix facade) {
         List<CityInfo> ci = facade.getAllCityInfoBetween();
         Random r = new Random();
-        
+
         for (int i = 0; i < persons.size(); i++) {
-        int randomNumber = r.nextInt(ci.size());
+            int randomNumber = r.nextInt(ci.size());
             Person person = persons.get(i);
             Address address = dg.getGeneratedAddress();
             Phone phone = dg.getGeneratedPhone();
@@ -218,10 +218,4 @@ public class CDFix {
         }
 
     }
-
-
-    void createDtoPerson(PersonInfoDTO p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

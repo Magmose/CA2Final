@@ -212,7 +212,7 @@ public class PersonResource {
 
     @DELETE
     @Path("/{id}")
-    public void deletePersonById(@PathParam("id") int id) {
+    public void deletePersonById(@PathParam("id") long id) {
         //below method call needs fixing once the method parameter is changed in DBFacade.deletePersonInDB
         db.deletePersonInDB(id);
     }
